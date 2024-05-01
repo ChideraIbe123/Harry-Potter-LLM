@@ -4,3 +4,4 @@
 4. Move training_state_harry_potter.dat and output.txt into femtoGPT
 5. cd my-backend
 6. npm start
+7. Open localhost through terminal
