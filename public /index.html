@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wizarding World Textbook</title>
+    <style>
+        body {
+            font-family: 'Cinzel', serif;
+            color: #dcd0c0;
+            text-align: center;
+            line-height: 1.6;
+            background-color: #1a0d00;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        header {
+            background: rgba(78, 52, 46, 0.95); /* Dark wood with high opacity */
+            padding: 20px;
+            font-size: 28px;
+            color: #f4e5c3; /* Goldish color for header text */
+        }
+
+        button {
+            background-color: #4e342e; 
+            color: #f4e5c3; 
+            border: none;
+            padding: 12px 24px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px; /* Added some top margin for spacing */
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #3e2723; 
+        }
+
+        #responseArea {
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(251, 247, 240, 0.85); 
+            min-height: 100px;
+            width: 60%;
+            margin-left: auto;
+            margin-right: auto;
+            border-left: 5px solid #946f51; 
+            border-right: 5px solid #946f51;
+            color: #000000;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Harry Potter Textbook</h1>
+    </header>
+    <main>
+        <button id="runCargoButton">Cast a Spell</button>
+        <section id="responseArea"></section>
+    </main>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const runCargoButton = document.getElementById('runCargoButton');
+            const responseArea = document.getElementById('responseArea');
+        
+            runCargoButton.addEventListener('click', function() {
+                fetch('http://localhost:3000/run-cargo')
+                    .then(response => response.json())
+                    .then(data => {
+                        const outputText = data.stdout;
+                        // Use a regular expression to extract the text after "Generating text:"
+                        const match = outputText.match(/Generating text:([\s\S]*)/);
+                        if (match && match[1]) {
+                            // Display only the text after "Generating text:"
+                            responseArea.textContent = `Output: ${match[1].trim()}`;
+                        } else {
+                            responseArea.textContent = 'No text generated or format mismatch';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        responseArea.textContent = 'Failed to run cargo: ' + error.message;
+                    });
+            });
+        });
+        </script>
+</body>
+</html>
