@@ -58,12 +58,6 @@ fn main() -> Result<(), GraphError> {
     gpt.sync()?;
 
     println!("Number of parameters: {}", gpt.num_params());
-
-    // Load training data from train_data directory (If exists)
-    // If you want to reuse training_data of a smaller model in a bigger model, you may
-    // first start again with a new optimizer by setting load_optimizer=false
-    // WARN: YOU CAN ONLY REUSE THE WEIGHTS OF A MODEL WITH DIFFERENT NUM-LAYERS!
-    // IT'S NOT POSSIBLE TO CHANGE OTHER PROPERTIES ONCE THE MODEL IS TRAINED!
     if training_state_path.is_file() {
         let mut ts_file = fs::File::open(training_state_path).unwrap();
         let mut bytes = Vec::new();
@@ -71,10 +65,6 @@ fn main() -> Result<(), GraphError> {
         let ts: TrainingState = bincode::deserialize(&bytes).unwrap();
         gpt.set_training_state(ts, true)?;
     }
-
-    // println!();
-    // println!("Starting the training loop... (This make take hours to converge! be patient!)");
-    // println!();
 
     let base_lr = 0.001;
     let min_lr = 0.00001;
@@ -85,7 +75,6 @@ fn main() -> Result<(), GraphError> {
         if step < warmup_steps {
             (base_lr / warmup_steps as f32) * step as f32
         } else {
-            // Fancy LR tuning, thanks to https://github.com/cutoken!
             f32::max(
                 min_lr,
                 base_lr - (base_lr - min_lr) * (step - warmup_steps) as f32 / decay_steps as f32,
@@ -95,8 +84,7 @@ fn main() -> Result<(), GraphError> {
 
     let callback = |gpt: &mut GPT<_>| {
         let mut rng = rand::thread_rng();
-        let inference_temperature = 0.5; // How creative? 0.0 min 1.0 max
-
+        let inference_temperature = 0.5;
         println!("Generating text:");
 
         let inference = gpt.infer(
@@ -106,17 +94,8 @@ fn main() -> Result<(), GraphError> {
             inference_temperature,
             |_ch| {},
         )?;
-
-        // Generate 100 character with the currently trained model before
-        // starting the training loop.
         
         println!("{}", tokenizer.untokenize(&inference));
-
-        // println!("Saving the model...");
-        // gpt.sync().unwrap();
-        // let ts = gpt.get_training_state().unwrap();
-        // let bytes = bincode::serialize(&ts).unwrap();
-        // fs::write(training_state_path, &bytes).expect("Unable to write file");
 
         Ok(())
     };
@@ -128,22 +107,11 @@ fn main() -> Result<(), GraphError> {
         &dataset,
         100000,
         batch_size,
-        None, // or Some(n), limit backward process to last n computations
+        None,
         &AdamW::new(),
         learning_rate,
         callback,
     )?;
-
-    // #[cfg(feature = "gpu")]
-    // gpt.train(
-    //     &dataset,
-    //     100000,
-    //     batch_size,
-    //     None, // or Some(n), limit backward process to last n computations
-    //     &AdamW::new(),
-    //     learning_rate,
-    //     callback,
-    // )?;
 
     Ok(())
 }
