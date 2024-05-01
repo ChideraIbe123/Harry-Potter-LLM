@@ -1,30 +1,25 @@
 # Harry Potter Textbook
 
 ## Objective
-Develop a website for creating new Harry Potter sentences based on 
+Develop a website for creating new Harry Potter sentences based on all 7 previous books in the series using an LLM model. 
 
 ## Steps
 
 ### Dataset Creation
-- **Task Selection**: Focus on a diverse set of QA tasks, including fact-based, opinion-based, and reasoning questions.
-- **Data Generation**: Use an LLM to generate answers and corresponding explanations detailing the model’s reasoning process for each question.
-- **Annotation**: Manually review and annotate the explanations for accuracy, coherence, and alignment with the model’s answers. Include metadata such as question type, difficulty, and the model’s confidence score.
+- **Dataset Selection**: Finding a proper dataset that emulates all 7 Harry Potter Books. 
+- **Data Concatenation**: Separate each sentence line by line to create a clean dataset. 
 
-### Analysis Tool Development
-- **Feature Extraction**: Develop a tool to parse and analyze the explanations, extracting key features like reasoning chains, evidence sources, and logical fallacies.
-- **Visualization**: Create a visualization component to represent explanation structures, showing how different parts contribute to the final answer.
-- **Evaluation Metrics**: Implement metrics to assess explanation quality, including clarity, completeness, and reliability.
+### Website
+- **Front End**: Creating a website to visualize the output.
+- **Server**: Creating a server to connect all components together. 
 
 ### Integration and Testing
-- **Integration**: Combine the dataset and analysis tool into a single platform where users can query the dataset and view detailed analyses of the model's explanations.
+- **Integration**: Combine the LLM and front end into a single platform where users can receive LLM outputs directly from a click of a button.
 - **Testing and Feedback**: Test the system with end-users, collect feedback, and refine the tool and dataset accordingly.
 
-### Research and Publication
-- Conduct a study using the dataset to identify patterns in LLM approaches to different question types and common explanation pitfalls.
-- Publish findings and the dataset, offering insights into LLM decision-making processes and contributing to AI explainability research.
 
 ## Technologies and Skills Required
-- **Machine Learning and NLP**: Knowledge of LLMs, QA systems, and natural language understanding.
+- **Machine Learning and NLP**: Knowledge of LLMs, and natural language understanding.
 - **Data Annotation**: Experience in creating guidelines and annotating data for AI models.
 - **Software Development**: Proficiency in programming language Rust, especially in data processing and visualization tool development.
 - **Research and Analysis**: Ability to conduct systematic studies and analyze data for meaningful conclusions.
